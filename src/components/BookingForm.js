@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './BookingForm.css';
 import Toast from './Toast';
 
-const BookingForm = () => {
+const BookingForm = ({ availableTimes = [], updateTimes }) => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [showToast, setShowToast] = useState(false);
@@ -83,6 +83,11 @@ const BookingForm = () => {
         ...prev,
         [name]: ''
       }));
+    }
+
+    // Update available times when date changes
+    if (name === 'date' && updateTimes) {
+      updateTimes(value);
     }
   };
 
@@ -174,16 +179,19 @@ const BookingForm = () => {
                 aria-describedby={errors.time ? 'time-error' : undefined}
               >
                 <option value="">Select a time</option>
-                <option value="17:00">5:00 PM</option>
-                <option value="17:30">5:30 PM</option>
-                <option value="18:00">6:00 PM</option>
-                <option value="18:30">6:30 PM</option>
-                <option value="19:00">7:00 PM</option>
-                <option value="19:30">7:30 PM</option>
-                <option value="20:00">8:00 PM</option>
-                <option value="20:30">8:30 PM</option>
-                <option value="21:00">9:00 PM</option>
-                <option value="21:30">9:30 PM</option>
+                {availableTimes.map((time) => {
+                  const hour = parseInt(time.split(':')[0]);
+                  const minute = time.split(':')[1];
+                  const period = hour >= 12 ? 'PM' : 'AM';
+                  const displayHour = hour > 12 ? hour - 12 : hour;
+                  const displayTime = `${displayHour}:${minute} ${period}`;
+
+                  return (
+                    <option key={time} value={time}>
+                      {displayTime}
+                    </option>
+                  );
+                })}
               </select>
               {errors.time && (
                 <span id="time-error" className="error-message" role="alert">

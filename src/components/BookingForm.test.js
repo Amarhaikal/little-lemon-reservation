@@ -3,14 +3,33 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import BookingForm from './BookingForm';
 
+const mockAvailableTimes = [
+  '17:00',
+  '17:30',
+  '18:00',
+  '18:30',
+  '19:00',
+  '19:30',
+  '20:00',
+  '20:30',
+  '21:00',
+  '21:30'
+];
+
+const mockUpdateTimes = jest.fn();
+
 const renderWithRouter = (component) => {
   return render(<MemoryRouter>{component}</MemoryRouter>);
 };
 
 describe('BookingForm Component', () => {
+  beforeEach(() => {
+    mockUpdateTimes.mockClear();
+  });
+
   describe('Initial Render', () => {
     test('renders step 1 form initially', () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       expect(screen.getByText('Reservation Details')).toBeInTheDocument();
       expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
@@ -20,7 +39,7 @@ describe('BookingForm Component', () => {
     });
 
     test('renders progress indicator with step 1 active', () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const steps = screen.getAllByText(/1|2/);
       expect(steps.length).toBeGreaterThan(0);
@@ -31,7 +50,7 @@ describe('BookingForm Component', () => {
 
   describe('Step 1 - Reservation Details Validation', () => {
     test('shows error when submitting empty form', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const nextButton = screen.getByRole('button', { name: /next/i });
       fireEvent.click(nextButton);
@@ -44,7 +63,7 @@ describe('BookingForm Component', () => {
     });
 
     test('shows error for past date selection', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const dateInput = screen.getByLabelText(/date/i);
       const pastDate = '2023-01-01';
@@ -58,7 +77,7 @@ describe('BookingForm Component', () => {
     });
 
     test('shows error for invalid number of diners', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const dinersInput = screen.getByLabelText(/number of diners/i);
 
@@ -71,7 +90,7 @@ describe('BookingForm Component', () => {
     });
 
     test('clears error when user corrects input', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const dateInput = screen.getByLabelText(/date/i);
       const nextButton = screen.getByRole('button', { name: /next/i });
@@ -93,7 +112,7 @@ describe('BookingForm Component', () => {
 
   describe('Step 1 to Step 2 Navigation', () => {
     test('navigates to step 2 with valid data', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -122,7 +141,7 @@ describe('BookingForm Component', () => {
 
   describe('Step 2 - User Information Validation', () => {
     beforeEach(async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -196,7 +215,7 @@ describe('BookingForm Component', () => {
 
   describe('Back Navigation', () => {
     test('navigates back to step 1 from step 2', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -220,7 +239,7 @@ describe('BookingForm Component', () => {
     });
 
     test('preserves form data when navigating back', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -250,7 +269,7 @@ describe('BookingForm Component', () => {
 
   describe('Form Submission', () => {
     test('shows toast notification on successful submission', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -278,7 +297,7 @@ describe('BookingForm Component', () => {
 
   describe('Accessibility', () => {
     test('all form inputs have proper labels', () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/time/i)).toBeInTheDocument();
@@ -286,7 +305,7 @@ describe('BookingForm Component', () => {
     });
 
     test('error messages are associated with inputs', async () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       fireEvent.click(screen.getByRole('button', { name: /next/i }));
 
@@ -298,11 +317,35 @@ describe('BookingForm Component', () => {
     });
 
     test('required fields are marked as required', () => {
-      renderWithRouter(<BookingForm />);
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
 
       expect(screen.getByLabelText(/date/i)).toHaveAttribute('aria-required', 'true');
       expect(screen.getByLabelText(/time/i)).toHaveAttribute('aria-required', 'true');
       expect(screen.getByLabelText(/number of diners/i)).toHaveAttribute('aria-required', 'true');
+    });
+  });
+
+  describe('Parent Component Integration', () => {
+    test('calls updateTimes when date changes', () => {
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
+
+      const today = new Date().toISOString().split('T')[0];
+      const dateInput = screen.getByLabelText(/date/i);
+
+      fireEvent.change(dateInput, { target: { value: today } });
+
+      expect(mockUpdateTimes).toHaveBeenCalledWith(today);
+      expect(mockUpdateTimes).toHaveBeenCalledTimes(1);
+    });
+
+    test('renders time options from availableTimes prop', () => {
+      renderWithRouter(<BookingForm availableTimes={mockAvailableTimes} updateTimes={mockUpdateTimes} />);
+
+      const timeSelect = screen.getByLabelText(/time/i);
+      const options = timeSelect.querySelectorAll('option');
+
+      // Should have "Select a time" plus all available times
+      expect(options.length).toBe(mockAvailableTimes.length + 1);
     });
   });
 });
