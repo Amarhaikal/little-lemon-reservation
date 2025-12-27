@@ -1,4 +1,4 @@
-.reservation-form-container {
+.booking-form-container {
   max-width: 600px;
   margin: 0 auto;
 }
@@ -61,7 +61,7 @@
   top: -20px;
 }
 
-.reservation-form {
+.booking-form {
   background-color: #f9f9f9;
   padding: 2.5rem;
   border-radius: 12px;
@@ -175,7 +175,7 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .reservation-form {
+  .booking-form {
     padding: 2rem;
   }
 
@@ -205,7 +205,7 @@
 }
 
 @media (max-width: 480px) {
-  .reservation-form {
+  .booking-form {
     padding: 1.5rem;
   }
 

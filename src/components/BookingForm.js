@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ReservationForm.css';
+import './BookingForm.css';
 import Toast from './Toast';
 
-const ReservationForm = () => {
+const BookingForm = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [showToast, setShowToast] = useState(false);
@@ -24,11 +24,10 @@ const ReservationForm = () => {
     if (!formData.date) {
       newErrors.date = 'Please select a date';
     } else {
-      const selectedDate = new Date(formData.date);
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const todayString = today.toISOString().split('T')[0];
 
-      if (selectedDate < today) {
+      if (formData.date < todayString) {
         newErrors.date = 'Please select a future date';
       }
     }
@@ -126,7 +125,7 @@ const ReservationForm = () => {
         />
       )}
 
-      <div className="reservation-form-container">
+      <div className="booking-form-container">
         <div className="progress-indicator">
           <div className={`progress-step ${currentStep >= 1 ? 'active' : ''}`}>
             <div className="step-number">1</div>
@@ -140,7 +139,7 @@ const ReservationForm = () => {
         </div>
 
         {currentStep === 1 && (
-          <form className="reservation-form" onSubmit={handleNext}>
+          <form className="booking-form" onSubmit={handleNext}>
             <div className="form-group">
               <label htmlFor="date">Date *</label>
               <input
@@ -223,7 +222,7 @@ const ReservationForm = () => {
         )}
 
         {currentStep === 2 && (
-          <form className="reservation-form" onSubmit={handleConfirm}>
+          <form className="booking-form" onSubmit={handleConfirm}>
             <div className="form-group">
               <label htmlFor="firstName">First Name *</label>
               <input
@@ -306,4 +305,4 @@ const ReservationForm = () => {
   );
 };
 
-export default ReservationForm;
+export default BookingForm;

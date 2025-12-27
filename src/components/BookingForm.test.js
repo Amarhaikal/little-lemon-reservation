@@ -1,16 +1,16 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import ReservationForm from './ReservationForm';
+import BookingForm from './BookingForm';
 
 const renderWithRouter = (component) => {
   return render(<MemoryRouter>{component}</MemoryRouter>);
 };
 
-describe('ReservationForm Component', () => {
+describe('BookingForm Component', () => {
   describe('Initial Render', () => {
     test('renders step 1 form initially', () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       expect(screen.getByText('Reservation Details')).toBeInTheDocument();
       expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
@@ -20,7 +20,7 @@ describe('ReservationForm Component', () => {
     });
 
     test('renders progress indicator with step 1 active', () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const steps = screen.getAllByText(/1|2/);
       expect(steps.length).toBeGreaterThan(0);
@@ -31,7 +31,7 @@ describe('ReservationForm Component', () => {
 
   describe('Step 1 - Reservation Details Validation', () => {
     test('shows error when submitting empty form', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const nextButton = screen.getByRole('button', { name: /next/i });
       fireEvent.click(nextButton);
@@ -44,7 +44,7 @@ describe('ReservationForm Component', () => {
     });
 
     test('shows error for past date selection', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const dateInput = screen.getByLabelText(/date/i);
       const pastDate = '2023-01-01';
@@ -58,7 +58,7 @@ describe('ReservationForm Component', () => {
     });
 
     test('shows error for invalid number of diners', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const dinersInput = screen.getByLabelText(/number of diners/i);
 
@@ -71,7 +71,7 @@ describe('ReservationForm Component', () => {
     });
 
     test('clears error when user corrects input', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const dateInput = screen.getByLabelText(/date/i);
       const nextButton = screen.getByRole('button', { name: /next/i });
@@ -93,7 +93,7 @@ describe('ReservationForm Component', () => {
 
   describe('Step 1 to Step 2 Navigation', () => {
     test('navigates to step 2 with valid data', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -122,7 +122,7 @@ describe('ReservationForm Component', () => {
 
   describe('Step 2 - User Information Validation', () => {
     beforeEach(async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -196,7 +196,7 @@ describe('ReservationForm Component', () => {
 
   describe('Back Navigation', () => {
     test('navigates back to step 1 from step 2', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -220,7 +220,7 @@ describe('ReservationForm Component', () => {
     });
 
     test('preserves form data when navigating back', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -250,7 +250,7 @@ describe('ReservationForm Component', () => {
 
   describe('Form Submission', () => {
     test('shows toast notification on successful submission', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       const today = new Date().toISOString().split('T')[0];
 
@@ -278,7 +278,7 @@ describe('ReservationForm Component', () => {
 
   describe('Accessibility', () => {
     test('all form inputs have proper labels', () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/time/i)).toBeInTheDocument();
@@ -286,7 +286,7 @@ describe('ReservationForm Component', () => {
     });
 
     test('error messages are associated with inputs', async () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       fireEvent.click(screen.getByRole('button', { name: /next/i }));
 
@@ -298,7 +298,7 @@ describe('ReservationForm Component', () => {
     });
 
     test('required fields are marked as required', () => {
-      renderWithRouter(<ReservationForm />);
+      renderWithRouter(<BookingForm />);
 
       expect(screen.getByLabelText(/date/i)).toHaveAttribute('aria-required', 'true');
       expect(screen.getByLabelText(/time/i)).toHaveAttribute('aria-required', 'true');

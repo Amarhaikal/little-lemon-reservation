@@ -141,8 +141,8 @@ booking-table-little-lemon/
 │   │   ├── Hero.css
 │   │   ├── MenuShowcase.js
 │   │   ├── MenuShowcase.css
-│   │   ├── ReservationForm.js
-│   │   ├── ReservationForm.css
+│   │   ├── BookingForm.js
+│   │   ├── BookingForm.css
 │   │   ├── Toast.js
 │   │   └── Toast.css
 │   ├── pages/
@@ -175,7 +175,7 @@ Builds the app for production to the `build` folder
 
 ### Running Tests
 
-The project includes comprehensive unit tests for the ReservationForm component using React Testing Library and Jest.
+The project includes comprehensive unit tests for the BookingForm component using React Testing Library and Jest.
 
 #### Run All Tests
 
@@ -194,7 +194,7 @@ npm test -- --watchAll=false
 #### Run Specific Test File
 
 ```bash
-npm test ReservationForm.test.js
+npm test BookingForm.test.js
 ```
 
 #### Run Tests with Coverage
@@ -205,7 +205,7 @@ npm test -- --coverage --watchAll=false
 
 ### Test Coverage
 
-The ReservationForm component has comprehensive test coverage including:
+The BookingForm component has comprehensive test coverage including:
 
 #### Initial Render Tests
 - Renders step 1 form with all required fields
@@ -301,7 +301,7 @@ Main banner section featuring the restaurant name, location, description, and CT
 ### MenuShowcase Component
 Interactive carousel displaying featured menu items with images, names, and prices. Automatically adjusts items per view based on screen size.
 
-### ReservationForm Component
+### BookingForm Component
 Multi-step form with validation:
 - Step 1: Date, time, and party size selection
 - Step 2: Customer contact information
